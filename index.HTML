@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>仙缘永结 · 陈以宁 & 姬时愿 · 成亲大典</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-red: #8B1A1A;
+            --dark-red: #5C0F0F;
+            --gold: #C9A84C;
+            --light-gold: #E8D5A3;
+            --parchment: #F5F0E6;
+            --parchment-dark: #E8E0D0;
+            --ink: #2C1810;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 50%, #1a0a0a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--ink);
+        }
+
+        /* 飘落花瓣 */
+        .petals-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(ellipse at center, rgba(255,182,193,0.8) 0%, rgba(255,105,180,0.4) 100%);
+            border-radius: 150% 0 150% 0;
+            animation: fall linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* 封面请柬 */
+        .cover-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 50%, #1a0a0a 100%);
+        }
+
+        .cover-page.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+
+        .invitation-cover {
+            width: 380px;
+            height: 560px;
+            background: linear-gradient(145deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            border: 3px solid var(--gold);
+            overflow: hidden;
+            margin: auto;
+        }
+
+        .invitation-cover::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 1px solid rgba(201, 168, 76, 0.4);
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .invitation-cover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .invitation-cover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 30px 80px rgba(0,0,0,0.7),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+
+        .cover-ribbon {
+            position: absolute;
+            top: -5px;
+            right: 30px;
+            width: 40px;
+            height: 80px;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--light-gold) 100%);
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        .cover-ribbon::after {
+            content: '囍';
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: var(--primary-red);
+            font-weight: bold;
+        }
+
+        .cover-seal {
+            width: 100px;
+            height: 100px;
+            border: 3px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(201, 168, 76, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(201, 168, 76, 0.6); }
+        }
+
+        .cover-seal-inner {
+            width: 80px;
+            height: 80px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-seal-text {
+            font-size: 32px;
+            color: var(--gold);
+            font-family: 'ZCOOL XiaoWei', serif;
+            letter-spacing: 6px;
+        }
+
+        .cover-title {
+            font-size: 28px;
+            color: var(--light-gold);
+            font-family: 'ZCOOL XiaoWei', serif;
+            letter-spacing: 12px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .cover-names {
+            font-size: 22px;
+            color: var(--gold);
+            letter-spacing: 8px;
+            margin-bottom: 30px;
+        }
+
+        .cover-hint {
+            font-size: 14px;
+            color: rgba(232, 213, 163, 0.6);
+            letter-spacing: 4px;
+            animation: breathe 2s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .cover-decoration {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cover-decoration .line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .cover-decoration .flower {
+            font-size: 20px;
+            color: var(--gold);
+        }
+
+        /* 内页内容 */
+        .content-page {
+            display: none;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 50;
+        }
+
+        .content-page.active {
+            display: block;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, var(--parchment) 0%, var(--parchment-dark) 100%);
+            border-radius: 4px;
+            position: relative;
+            box-shadow: 
+                0 10px 40px rgba(0,0,0,0.4),
+                inset 0 0 100px rgba(139, 26, 26, 0.03);
+            overflow: hidden;
+        }
+
+        /* 卷轴顶部装饰 */
+        .scroll-top {
+            height: 60px;
+            background: linear-gradient(180deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-top::before,
+        .scroll-top::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            width: 30px;
+            height: 30px;
+            background: var(--dark-red);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .scroll-top::before { left: 40px; }
+        .scroll-top::after { right: 40px; }
+
+        .scroll-top-text {
+            color: var(--gold);
+            font-size: 24px;
+            font-family: 'ZCOOL XiaoWei', serif;
+            letter-spacing: 16px;
+        }
+
+        /* 卷轴底部装饰 */
+        .scroll-bottom {
+            height: 60px;
+            background: linear-gradient(180deg, var(--dark-red) 0%, var(--primary-red) 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-bottom::before,
+        .scroll-bottom::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            width: 30px;
+            height: 30px;
+            background: var(--dark-red);
+            border-radius: 50%;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+        }
+
+        .scroll-bottom::before { left: 40px; }
+        .scroll-bottom::after { right: 40px; }
+
+        .scroll-content {
+            padding: 50px 60px;
+            position: relative;
+        }
+
+        /* 边框装饰 */
+        .scroll-content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            pointer-events: none;
+        }
+
+        /* 婚书正文 */
+        .wedding-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .wedding-header .double-happiness {
+            font-size: 48px;
+            color: var(--primary-red);
+            margin-bottom: 20px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .wedding-header .double-happiness::before,
+        .wedding-header .double-happiness::after {
+            content: '❖';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: var(--gold);
+        }
+
+        .wedding-header .double-happiness::before { left: -40px; }
+        .wedding-header .double-happiness::after { right: -40px; }
+
+        .wedding-title {
+            font-size: 32px;
+            color: var(--primary-red);
+            font-family: 'ZCOOL XiaoWei', serif;
+            letter-spacing: 20px;
+            margin-bottom: 10px;
+        }
+
+        .wedding-subtitle {
+            font-size: 16px;
+            color: var(--gold);
+            letter-spacing: 8px;
+        }
+
+        /* 正文内容 */
+        .wedding-body {
+            line-height: 2.4;
+            font-size: 17px;
+            text-align: justify;
+            margin-bottom: 40px;
+        }
+
+        .wedding-body p {
+            text-indent: 2em;
+            margin-bottom: 15px;
+        }
+
+        .highlight-name {
+            color: var(--primary-red);
+            font-weight: 600;
+            font-size: 19px;
+            letter-spacing: 4px;
+        }
+
+        .highlight-gold {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* 新人信息卡片 - 双女主设计 */
+        .couple-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            margin: 40px 0;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(139, 26, 26, 0.05) 0%, rgba(201, 168, 76, 0.05) 100%);
+            border-radius: 8px;
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            position: relative;
+        }
+
+        .couple-card {
+            text-align: center;
+            flex: 1;
+            padding: 20px;
+            position: relative;
+        }
+
+        .couple-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 4px 15px rgba(139, 26, 26, 0.3);
+            font-size: 40px;
+            color: var(--gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .couple-avatar::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .couple-name {
+            font-size: 22px;
+            color: var(--primary-red);
+            font-weight: 600;
+            letter-spacing: 6px;
+            margin-bottom: 5px;
+        }
+
+        .couple-title {
+            font-size: 14px;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        /* 中间连接区域 - 双女主同心结设计 */
+        .couple-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 25px;
+            position: relative;
+            min-width: 100px;
+        }
+
+        .connector-knot {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.15) 0%, rgba(139, 26, 26, 0.1) 100%);
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .connector-knot::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(201, 168, 76, 0.4);
+            border-radius: 50%;
+        }
+
+        .connector-knot .heart-icon {
+            font-size: 22px;
+            color: var(--primary-red);
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .connector-text {
+            font-size: 18px;
+            color: var(--gold);
+            font-family: 'ZCOOL XiaoWei', serif;
+            letter-spacing: 6px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+        }
+
+        .connector-line-top,
+        .connector-line-bottom {
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(180deg, transparent, var(--gold), transparent);
+        }
+
+        .connector-line-top {
+            margin-bottom: 10px;
+        }
+
+        .connector-line-bottom {
+            margin-top: 10px;
+        }
+
+        /* 婚礼信息 - 单列布局（一行一个） */
+        .info-section {
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(45, 90, 74, 0.05) 0%, rgba(139, 26, 26, 0.03) 100%);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-red);
+        }
+
+        .info-title {
+            font-size: 20px;
+            color: var(--primary-red);
+            font-family: 'ZCOOL XiaoWei', serif;
+            letter-spacing: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* 修改点：将原本两列的网格改为单列，实现“一行一个”展示 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(201, 168, 76, 0.25);
+        }
+
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 16px;
+            font-family: 'ZCOOL XiaoWei', serif;
+            flex-shrink: 0;
+            margin-top: 2px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #8f7a6b;
+            margin-bottom: 6px;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 17px;
+            color: var(--ink);
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* 仙侠特色内容 */
+        .xianxia-section {
+            margin: 40px 0;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .xianxia-section::before {
+            content: '☁';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: var(--gold);
+            opacity: 0.3;
+        }
+
+        .xianxia-text {
+            font-size: 16px;
+            line-height: 2.2;
+            color: var(--ink);
+            font-style: italic;
+        }
+
+        .xianxia-text p {
+            margin-bottom: 10px;
+        }
+
+        /* 落款 */
+        .signature-section {
+            margin-top: 50px;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .signature-date {
+            font-size: 15px;
+            color: var(--ink);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .signature-names {
+            font-size: 18px;
+            color: var(--primary-red);
+            font-weight: 600;
+            letter-spacing: 6px;
+        }
+
+        /* 印章效果 */
+        .seal-stamp {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--primary-red);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            transform: rotate(-5deg);
+            opacity: 0.8;
+        }
+
+        .seal-stamp span {
+            font-size: 14px;
+            color: var(--primary-red);
+            writing-mode: vertical-rl;
+            letter-spacing: 4px;
+            font-weight: bold;
+        }
+
+        /* 底部装饰 */
+        .bottom-decoration {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(201, 168, 76, 0.2);
+        }
+
+        .bottom-decoration .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .bottom-decoration .divider-line {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .bottom-decoration .divider-icon {
+            font-size: 20px;
+            color: var(--gold);
+        }
+
+        .blessing-text {
+            font-size: 14px;
+            color: var(--gold);
+            letter-spacing: 4px;
+            line-height: 2;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 200;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .invitation-cover {
+                width: 320px;
+                height: 480px;
+            }
+
+            .scroll-content {
+                padding: 30px 25px;
+            }
+
+            .couple-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .couple-connector {
+                flex-direction: row;
+                padding: 15px 0;
+            }
+
+            .connector-line-top,
+            .connector-line-bottom {
+                width: 30px;
+                height: 1px;
+                margin: 0 10px;
+            }
+
+            .connector-text {
+                writing-mode: horizontal-tb;
+            }
+
+            /* 移动端依然一行一个，保持单列 */
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .info-item {
+                flex-direction: row;
+                align-items: center;
+                gap: 15px;
+                padding: 10px 0;
+            }
+
+            .info-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+                margin-top: 0;
+            }
+
+            .info-content {
+                flex: 1;
+            }
+
+            .info-label {
+                font-size: 12px;
+                margin-bottom: 2px;
+            }
+
+            .info-value {
+                font-size: 15px;
+            }
+
+            .wedding-title {
+                font-size: 24px;
+                letter-spacing: 10px;
+            }
+        }
+
+        /* 光效 */
+        .glow-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            animation: glow-rotate 20s linear infinite;
+        }
+
+        @keyframes glow-rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 飘落花瓣 -->
+    <div class="petals-container" id="petals"></div>
+
+    <!-- 光效背景 -->
+    <div class="glow-effect"></div>
+
+    <!-- 古风婚礼背景音乐 -->
+<audio id="bgMusic" controls loop>
+    <source src="https://cdn.pixabay.com/download/audio/2025/06/13/audio_dfa433af2b.mp3?filename=tunetank-china-chinese-asian-music-349489.mp3" 
+    type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+</audio>
+
+    <!-- 封面请柬 -->
+    <div class="cover-page" id="coverPage">
+        <div class="invitation-cover" onclick="openInvitation()">
+            <div class="cover-ribbon"></div>
+            <div class="cover-seal">
+                <div class="cover-seal-inner">
+                    <span class="cover-seal-text">请柬</span>
+                </div>
+            </div>
+            <div class="cover-title">成亲大典</div>
+            <div class="cover-names">陈以宁 · 姬时愿</div>
+            <div class="cover-hint">轻启此柬 · 共证仙缘</div>
+            <div class="cover-decoration">
+                <div class="line"></div>
+                <div class="flower">❖</div>
+                <div class="line"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内页内容 -->
+    <div class="content-page" id="contentPage">
+        <div class="scroll-container">
+            <!-- 卷轴顶部 -->
+            <div class="scroll-top">
+                <span class="scroll-top-text">成亲大典</span>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="scroll-content">
+                <!-- 头部 -->
+                <div class="wedding-header">
+                    <div class="double-happiness">囍</div>
+                    <div class="wedding-title">成亲大典</div>
+                    <div class="wedding-subtitle">仙缘永结 · 白首同心</div>
+                </div>
+
+                <!-- 正文 -->
+                <div class="wedding-body">
+                    <p>谨以<span class="highlight-gold">天地为证</span>，<span class="highlight-gold">日月为盟</span>，今有<span class="highlight-name">陈以宁</span>与<span class="highlight-name">姬时愿</span>二人，于修仙问道之途相识相知，历经红尘劫数，终得仙缘共鸣。</p>
+                    <p>昔年初见，或在云海之巅，一眼万年，情根深种。同修共练，携手渡劫，于万千星辰中寻得彼此，于无尽岁月中确认此心。</p>
+                    <p>今择良辰吉日，于<span class="highlight-gold">飞舟之上</span>举行成亲之典，邀三界同道、四方亲友共赴盛会，见证此段仙缘。</p>
+                    <p>愿此后：</p>
+                    <p style="text-align: center; font-style: italic; color: var(--primary-red);">
+                        比翼双飞，同修大道<br>
+                        琴瑟和鸣，共赴长生<br>
+                        山河为鉴，此心不渝
+                    </p>
+                </div>
+
+                <!-- 新人信息 - 双女主同心结设计 -->
+                <div class="couple-section">
+                    <div class="couple-card">
+                        <div class="couple-avatar">宁</div>
+                        <div class="couple-name">陈以宁</div>
+                        <div class="couple-title">新人</div>
+                    </div>
+                    <div class="couple-connector">
+                        <div class="connector-line-top"></div>
+                        <div class="connector-knot">
+                            <span class="heart-icon">❤</span>
+                        </div>
+                        <div class="connector-text">同心</div>
+                        <div class="connector-line-bottom"></div>
+                    </div>
+                    <div class="couple-card">
+                        <div class="couple-avatar">愿</div>
+                        <div class="couple-name">姬时愿</div>
+                        <div class="couple-title">新人</div>
+                    </div>
+                </div>
+
+                <!-- 婚礼信息 - 一行一个布局（已调整为单列） -->
+                <div class="info-section">
+                    <div class="info-title">婚礼详情</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-icon">期</div>
+                            <div class="info-content">
+                                <div class="info-label">婚期</div>
+                                <div class="info-value">探虚历二十六年 · 六月十四</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">地</div>
+                            <div class="info-content">
+                                <div class="info-label">地点</div>
+                                <div class="info-value">探墟界内 · 飞舟</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">时</div>
+                            <div class="info-content">
+                                <div class="info-label">时辰</div>
+                                <div class="info-value">酉时 · 17点20分</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">典</div>
+                            <div class="info-content">
+                                <div class="info-label">仪典</div>
+                                <div class="info-value">成亲大典 · 三界同贺</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">证</div>
+                            <div class="info-content">
+                                <div class="info-label">证婚人</div>
+                                <div class="info-value">苍恒</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">主</div>
+                            <div class="info-content">
+                                <div class="info-label">主持人</div>
+                                <div class="info-value">九酒</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">礼</div>
+                            <div class="info-content">
+                                <div class="info-label">执礼人</div>
+                                <div class="info-value">程颂柒</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">物</div>
+                            <div class="info-content">
+                                <div class="info-label">定情信物</div>
+                                <div class="info-value">拾愿 · 绾宁手镯</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">亲</div>
+                            <div class="info-content">
+                                <div class="info-label">双方长辈</div>
+                                <div class="info-value">褚修叶 · 杨建设</div>
+                            </div>
+                        </div>
+                        <!-- 宾客 - 单列展示 -->
+                        <div class="info-item">
+                            <div class="info-icon">宾</div>
+                            <div class="info-content">
+                                <div class="info-label">宾客</div>
+                                <div class="info-value">暂定</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 仙侠特色 -->
+                <div class="xianxia-section">
+                    <div class="xianxia-text">
+                        <p>「 天地为鉴，风月为盟 」</p>
+                        <p>「 执手赴远，白首长生 」</p>
+                        <p>「 仙途漫漫，与君同行 」</p>
+                    </div>
+                </div>
+
+                <!-- 落款 -->
+                <div class="signature-section">
+                    <div class="signature-date">探虚历二十六年 六月十四 吉日</div>
+                    <div class="signature-names">陈以宁 · 姬时愿 谨订</div>
+                    <div class="seal-stamp">
+                        <span>仙缘永结</span>
+                    </div>
+                </div>
+
+                <!-- 底部祝福 -->
+                <div class="bottom-decoration">
+                    <div class="divider">
+                        <div class="divider-line"></div>
+                        <div class="divider-icon">❖</div>
+                        <div class="divider-line"></div>
+                    </div>
+                    <div class="blessing-text">
+                        恭请光临 · 共证仙缘<br>
+                        愿君携福而至 · 携喜而归
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卷轴底部 -->
+            <div class="scroll-bottom">
+                <span class="scroll-top-text" style="font-size: 18px; letter-spacing: 12px;">百年好合</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回按钮 -->
+    <button class="back-btn" id="backBtn" onclick="closeInvitation()" style="display: none;">↩</button>
+
+    <script>
+// 合成音效函数
+function playClickSound() {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.frequency.value = 880;
+        gainNode.gain.value = 0.25;
+        oscillator.start();
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+        oscillator.stop(now + 0.25);
+    } catch(e) { /* 静默处理 */ }
+}
+        // 生成飘落花瓣
+        function createPetals() {
+            const container = document.getElementById('petals');
+            const petalCount = 28;
+
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDuration = (Math.random() * 6 + 8) + 's';
+                petal.style.animationDelay = (Math.random() * 10) + 's';
+                petal.style.width = (Math.random() * 10 + 15) + 'px';
+                petal.style.height = (Math.random() * 10 + 15) + 'px';
+
+                const colors = [
+                    'radial-gradient(ellipse at center, rgba(255,182,193,0.8) 0%, rgba(255,105,180,0.3) 100%)',
+                    'radial-gradient(ellipse at center, rgba(255,200,200,0.8) 0%, rgba(200,100,100,0.3) 100%)',
+                    'radial-gradient(ellipse at center, rgba(255,220,180,0.8) 0%, rgba(201,168,76,0.3) 100%)'
+                ];
+                petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                container.appendChild(petal);
+            }
+        }
+
+        // 音乐播放控制（柔和背景）
+        let musicStarted = false;
+        function playBgMusic() {
+            const music = document.getElementById('bgMusic');
+            if (music && !musicStarted) {
+                music.volume = 0.35;
+                music.play().catch(e => console.log("音乐自动播放需用户交互后生效"));
+                musicStarted = true;
+            }
+        }
+
+        // 打开请柬
+        function openInvitation() {
+            playClickSound();
+            const cover = document.getElementById('coverPage');
+            const content = document.getElementById('contentPage');
+            const backBtn = document.getElementById('backBtn');
+
+            cover.classList.add('hidden');
+            playBgMusic();  // 用户点击打开时播放仙乐
+
+            setTimeout(() => {
+                content.classList.add('active');
+                backBtn.style.display = 'flex';
+                window.scrollTo(0, 0);
+            }, 600);
+        }
+
+        // 关闭请柬（返回封面）
+        function closeInvitation() {
+            playClickSound();
+            const cover = document.getElementById('coverPage');
+            const content = document.getElementById('contentPage');
+            const backBtn = document.getElementById('backBtn');
+
+            content.classList.remove('active');
+            backBtn.style.display = 'none';
+
+            setTimeout(() => {
+                cover.classList.remove('hidden');
+            }, 300);
+        }
+
+        createPetals();
+
+        document.querySelector('.invitation-cover').addEventListener('mouseenter', function() {
+            this.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+        });
+    </script>
+</body>
+</html>
