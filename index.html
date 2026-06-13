@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>仙缘永结 · 陈以宁 & 姬时愿 · 成亲大典</title>
-    <link链接 href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWeifamily=ZCOOL+小威&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,22 +12,22 @@
             box-sizing: border-box;
         }
 
-        :root根 {
-            --primary-red--主红色: #8B1A1A;
-            --dark-red: #5C0F0F;            --深红色：#5C0F0F;
-            --gold: #C9A84C;            --金色：#C9A84C;
-            --light-gold——浅金色: #E8D5A3            --浅金色： #E8D5A3;            --浅金色：#E8D5A3;
-            --parchment——羊皮纸: #F5F0E6;            --羊皮纸色：#F5F0E6;
-            --parchment-dark——深色羊皮纸: #E8E0D0;            --深羊皮纸色：#E8E0D0;
-            --ink——墨水: #2C1810;            --墨色：#2C1810;
+        :root {
+            --primary-red: #8B1A1A;
+            --dark-red: #5C0F0F;
+            --gold: #C9A84C;
+            --light-gold: #E8D5A3;
+            --parchment: #F5F0E6;
+            --parchment-dark: #E8E0D0;
+            --ink: #2C1810;
         }
 
         body {
             font-family: 'Noto Serif SC', serif;
-            background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 50%, #1a0a0a 100%);
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 50%, #1a0a0a 100%) !important;
             min-height: 100vh;
             overflow-x: hidden;
-            color: var(--ink——墨水);(--ink);
+            color: var(--ink);
         }
 
         /* 飘落花瓣 */
@@ -81,7 +81,7 @@
             align-items: center;
             z-index: 100;
             transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 50%, #1a0a0a 100%);
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 50%, #1a0a0a 100%) !important;
         }
 
         .cover-page.hidden {
@@ -273,10 +273,12 @@
             }
         }
 
+        /* 卷轴容器：强制背景稳定 */
         .scroll-container {
             max-width: 800px;
             margin: 0 auto;
-            background: linear-gradient(180deg, var(--parchment) 0%, var(--parchment-dark) 100%);
+            background: #F5F0E6 !important; /* 纯色后备 */
+            background: linear-gradient(180deg, var(--parchment) 0%, var(--parchment-dark) 100%) !important;
             border-radius: 4px;
             position: relative;
             box-shadow: 
@@ -852,6 +854,22 @@
             from { transform: translate(-50%, -50%) rotate(0deg); }
             to { transform: translate(-50%, -50%) rotate(360deg); }
         }
+
+        /* 音乐播放器样式优化 */
+        audio {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 300;
+            width: 240px;
+            opacity: 0.85;
+            border-radius: 30px;
+            background: rgba(44, 24, 16, 0.7);
+            backdrop-filter: blur(4px);
+        }
+        @media (max-width: 640px) {
+            audio { width: 180px; left: 16px; bottom: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -861,12 +879,11 @@
     <!-- 光效背景 -->
     <div class="glow-effect"></div>
 
-    <!-- 古风婚礼背景音乐 -->
-<audio id="bgMusic" controls loop>
-    <source src="https://cdn.pixabay.com/download/audio/2025/06/13/audio_dfa433af2b.mp3?filename=tunetank-china-chinese-asian-music-349489.mp3" 
-    type="audio/mpeg">
-    您的浏览器不支持 audio 元素。
-</audio>
+    <!-- 古风婚礼背景音乐（带控制条，确保可手动播放） -->
+    <audio id="bgMusic" controls loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2025/06/13/audio_dfa433af2b.mp3?filename=tunetank-china-chinese-asian-music-349489.mp3" type="audio/mpeg">
+        您的浏览器不支持音频播放。
+    </audio>
 
     <!-- 封面请柬 -->
     <div class="cover-page" id="coverPage">
@@ -940,7 +957,7 @@
                     </div>
                 </div>
 
-                <!-- 婚礼信息 - 一行一个布局（已调整为单列） -->
+                <!-- 婚礼信息 - 一行一个布局 -->
                 <div class="info-section">
                     <div class="info-title">婚礼详情</div>
                     <div class="info-grid">
@@ -1007,7 +1024,6 @@
                                 <div class="info-value">褚修叶 · 杨建设</div>
                             </div>
                         </div>
-                        <!-- 宾客 - 单列展示 -->
                         <div class="info-item">
                             <div class="info-icon">宾</div>
                             <div class="info-content">
@@ -1061,22 +1077,23 @@
     <button class="back-btn" id="backBtn" onclick="closeInvitation()" style="display: none;">↩</button>
 
     <script>
-// 合成音效函数
-function playClickSound() {
-    try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const now = audioCtx.currentTime;
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.frequency.value = 880;
-        gainNode.gain.value = 0.25;
-        oscillator.start();
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
-        oscillator.stop(now + 0.25);
-    } catch(e) { /* 静默处理 */ }
-}
+        // 合成音效函数（点击反馈）
+        function playClickSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioCtx.currentTime;
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.frequency.value = 880;
+                gainNode.gain.value = 0.25;
+                oscillator.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+                oscillator.stop(now + 0.25);
+            } catch(e) { /* 静默处理 */ }
+        }
+
         // 生成飘落花瓣
         function createPetals() {
             const container = document.getElementById('petals');
@@ -1102,13 +1119,13 @@ function playClickSound() {
             }
         }
 
-        // 音乐播放控制（柔和背景）
+        // 音乐播放控制（用户交互后尝试自动播放）
         let musicStarted = false;
         function playBgMusic() {
             const music = document.getElementById('bgMusic');
             if (music && !musicStarted) {
                 music.volume = 0.35;
-                music.play().catch(e => console.log("音乐自动播放需用户交互后生效"));
+                music.play().catch(e => console.log("音乐需手动点击播放"));
                 musicStarted = true;
             }
         }
@@ -1121,7 +1138,7 @@ function playClickSound() {
             const backBtn = document.getElementById('backBtn');
 
             cover.classList.add('hidden');
-            playBgMusic();  // 用户点击打开时播放仙乐
+            playBgMusic();
 
             setTimeout(() => {
                 content.classList.add('active');
